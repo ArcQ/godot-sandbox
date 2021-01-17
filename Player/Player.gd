@@ -18,9 +18,11 @@ var roll_vector = Vector2.LEFT
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
+onready var swordHitBox = $HitboxPivot/SwordHitBox
 
 func _ready():
   animationTree.active = true
+  swordHitBox.knockback_vector = roll_vector
 
 # framerate is synced only after physics is processed, versus process which is called as fast as you can
 func _physics_process(delta):
@@ -41,6 +43,7 @@ func move_state(delta):
 
   if input_vector != Vector2.ZERO:
     roll_vector = input_vector
+    swordHitBox.knockback_vector = input_vector
     animationTree.set("parameters/idle/blend_position", input_vector)
     animationTree.set("parameters/run/blend_position", input_vector)
     animationTree.set("parameters/roll/blend_position", input_vector)
