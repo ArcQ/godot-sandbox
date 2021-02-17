@@ -1,9 +1,9 @@
 extends KinematicBody2D
 
-const MAX_SPEED = 100
-const ACCELERATION_DT = 300
-const FRICTION_DT = 300
-const ROLL_SPEED = 150
+const MAX_SPEED = 40
+const ACCELERATION_DT = 100
+const FRICTION_DT = 100
+const ROLL_SPEED = 60
 
 enum {
     MOVE,
@@ -14,6 +14,7 @@ enum {
 var state = MOVE
 var velocity = Vector2.ZERO
 var roll_vector = Vector2.LEFT
+var target = Vector2.ZERO
 
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
@@ -21,8 +22,14 @@ onready var animationState = animationTree.get("parameters/playback")
 onready var swordHitBox = $HitboxPivot/SwordHitBox
 
 func _ready():
+  target = position
   animationTree.active = true
   swordHitBox.knockback_vector = roll_vector
+
+func _input(event):
+    if event is InputEventScreenTouch:
+        target = event.position
+        print(event.position)
 
 # framerate is synced only after physics is processed, versus process which is called as fast as you can
 func _physics_process(delta):
@@ -37,9 +44,9 @@ func _physics_process(delta):
 
 func move_state(delta):
   var input_vector = Vector2.ZERO
-  input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
-  input_vector.y = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
-  input_vector = input_vector.normalized()
+
+  if (target - position).length() > 20:
+    input_vector = (target - position).normalized()
 
   if input_vector != Vector2.ZERO:
     roll_vector = input_vector

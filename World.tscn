@@ -907,7 +907,7 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 [node name="World" type="Node2D"]
 
 [node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 160, 90 )
+position = Vector2( 160, 88 )
 texture = ExtResource( 3 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 320, 180 )
